@@ -32,7 +32,7 @@ namespace GestaoDeEquipamenots.ConsoleApp
 
                             if (operacaoEmEquipamentos != "1" && operacaoEmEquipamentos != "2" && operacaoEmEquipamentos != "3" && operacaoEmEquipamentos != "4" && operacaoEmEquipamentos != "5")
                             {
-                                MostrarMensagemOperacaoInvalida();
+                                ApresentarMensagemEmVermelho("\n   Operação inválida, tente novamente. ");
                                 continue;
                             }
                             else if (operacaoEmEquipamentos == "5")
@@ -49,8 +49,7 @@ namespace GestaoDeEquipamenots.ConsoleApp
                                     case "2":
                                         if (equipamentosCadastrados.Count == 0)
                                         {
-                                            Console.WriteLine("\n   Nenhum equipamento cadastrado. Por favor, cadastre um equipamento para visualizar seu registro.");
-                                            Console.ReadLine();
+                                            ApresentarMensagemEmVermelho("\n   Nenhum equipamento cadastrado. Por favor, cadastre um equipamento para visualizar seu registro.");
                                             break;
                                         }
                                         VisualizarEquipamentosRegistrados();
@@ -60,8 +59,7 @@ namespace GestaoDeEquipamenots.ConsoleApp
                                     case "3":
                                         if (equipamentosCadastrados.Count == 0)
                                         {
-                                            Console.WriteLine("\n   Nenhum equipamento cadastrado. Por favor, cadastre um equipamento antes de editar um registro.");
-                                            Console.ReadLine();
+                                            ApresentarMensagemEmVermelho("\n   Nenhum equipamento cadastrado. Por favor, cadastre um equipamento antes de editar um registro.");
                                             break;
                                         }
                                         VisualizarEquipamentosRegistrados();
@@ -74,12 +72,11 @@ namespace GestaoDeEquipamenots.ConsoleApp
 
                                         if (editarEquipamentoID < 1 || editarEquipamentoID > equipamentosCadastrados.Count)
                                         {
-                                            Console.WriteLine("\n   ID inválido. Por favor, digite um ID válido.");
-                                            Console.ReadLine();
-                                            break;
+                                            ApresentarMensagemEmVermelho("\n   ID inválido. Por favor, digite um ID válido.");
+                                            return;
                                         }
 
-                                        Console.Write("\n   Digite o nome do equipamento que deseja editar, contendo no mínimo 6 caracteres: ");
+                                        Console.Write("\n   Digite o nome do equipamento editado, contendo no mínimo 6 caracteres: ");
                                         string nomeEquipamentoEditado = Console.ReadLine();
 
                                         nomeEquipamentoEditado = ValidarTamanhoNomeEquipamento(nomeEquipamentoEditado);
@@ -99,15 +96,12 @@ namespace GestaoDeEquipamenots.ConsoleApp
 
                                         VisualizarEquipamentosRegistrados();
 
-                                        MostrarMensagemEquipamentoEditado();
-
-                                        Console.ReadLine();
+                                        ApresentarMensagemEmVerde("\n   Seu equipamento foi editado com sucesso!");
                                         break;
                                     case "4":
                                         if (equipamentosCadastrados.Count == 0)
                                         {
-                                            Console.WriteLine("\n   Nenhum equipamento cadastrado. Por favor, cadastre um equipamento antes de excluir um.");
-                                            Console.ReadLine();
+                                            ApresentarMensagemEmVermelho("\n   Você nao possuí nenhum equipamento cadastrado. Por favor, cadastre um equipamento antes de excluir um.");
                                             break;
                                         }
                                         VisualizarEquipamentosRegistrados();
@@ -119,18 +113,23 @@ namespace GestaoDeEquipamenots.ConsoleApp
 
                                         if (excluirEquipamentoIndex == -1)
                                         {
-                                            Console.WriteLine("\n   ID inválido. Por favor, digite um ID válido.");
-                                            Console.ReadLine();
+                                            ApresentarMensagemEmVermelho("\n   ID inválido. Por favor, digite um ID válido.");
                                             break;
                                         }
 
                                         equipamentosCadastrados.RemoveAt(excluirEquipamentoIndex);
 
+                                        for (int i = excluirEquipamentoIndex; i < equipamentosCadastrados.Count; i++)
+                                        {
+                                            string equipamento = equipamentosCadastrados[i];
+                                            string[] dadosEquipamento = equipamento.Split('|');
+                                            int novoID = i + 1;
+                                            equipamentosCadastrados[i] = $"{novoID} | {dadosEquipamento[1].Trim()} | {dadosEquipamento[2].Trim()} | {dadosEquipamento[3].Trim()} | {dadosEquipamento[4].Trim()} | {dadosEquipamento[5].Trim()}";
+                                        }
+
                                         VisualizarEquipamentosRegistrados();
 
-                                        MostrarMensagemEquipamentoExcluido();
-                                        Console.ReadLine();
-
+                                        ApresentarMensagemEmVerde("\n   Seu equipamento foi excluído com sucesso, e sua lista está atualizada!");
                                         break;
                                 }
                                 continuar = true;
@@ -145,7 +144,7 @@ namespace GestaoDeEquipamenots.ConsoleApp
 
                             if (operacaoEmChamados != "1" && operacaoEmChamados != "2" && operacaoEmChamados != "3" && operacaoEmChamados != "4" && operacaoEmChamados != "5")
                             {
-                                MostrarMensagemOperacaoInvalida();
+                                ApresentarMensagemEmVermelho("\n   Operação inválida, tente novamente. ");
                                 continue;
                             }
                             else if (operacaoEmChamados == "5")
@@ -160,10 +159,9 @@ namespace GestaoDeEquipamenots.ConsoleApp
                                         RegistrarChamado();
                                         break;
                                     case "2":
-                                        if (equipamentosCadastrados.Count == 0)
+                                        if (chamadosCadastrados.Count == 0)
                                         {
-                                            Console.WriteLine("\n   Nenhum chamado realizado. Por favor, cadastre um chamado para visualizá-lo.");
-                                            Console.ReadLine();
+                                            ApresentarMensagemEmVermelho("\n   Nenhum chamado realizado. Por favor, cadastre um chamado para visualizá-lo.");
                                             break;
                                         }
                                         VisualizarChamadosRegistrados();
@@ -172,14 +170,12 @@ namespace GestaoDeEquipamenots.ConsoleApp
                                     case "3":
                                         if (equipamentosCadastrados.Count == 0)
                                         {
-                                            Console.WriteLine("\n   Nenhum equipamento cadastrado. Por favor, cadastre um equipamento antes de editar um chamado.");
-                                            Console.ReadLine();
+                                            ApresentarMensagemEmVermelho("\n   Nenhum equipamento cadastrado. Por favor, cadastre um equipamento antes de editar um chamado.");
                                             break;
                                         }
-                                        if (chamadosCadastrados.Count == 0)
+                                        else if (chamadosCadastrados.Count == 0)
                                         {
-                                            Console.WriteLine("\n   Nenhum chamado cadastrado. Por favor, registre um chamado antes de editar um chamado.");
-                                            Console.ReadLine();
+                                            ApresentarMensagemEmVermelho("\n   Nenhum chamado cadastrado. Por favor, registre um chamado antes de editar um chamado.");
                                             break;
                                         }
                                         VisualizarChamadosRegistrados();
@@ -189,16 +185,17 @@ namespace GestaoDeEquipamenots.ConsoleApp
 
                                         if (chamadosExcluidos.Contains(editarChamado - 1))
                                         {
-                                            Console.WriteLine("\n   Este chamado foi excluído e não pode ser editado.");
-                                            Console.ReadLine();
+                                            ApresentarMensagemEmVermelho("\n   Este chamado foi excluído e não pode ser editado.");
                                             break;
                                         }
 
-                                        Console.Write("\n   Digite título do chamado que deseja cadastrar: ");
+                                        Console.Write("\n   Digite o título do chamado: ");
                                         string tituloChamadoEditado = Console.ReadLine();
 
-                                        Console.Write("\n   Digite a descricao do chamado que deseja cadastrar: ");
+                                        Console.Write("\n   Digite a descricao do chamado: ");
                                         string descricaoChamadoEditado = Console.ReadLine();
+
+                                        VisualizarEquipamentosRegistradosEscolha();
 
                                         Console.Write("\n   Digite o equipamento referente a esse chamado: ");
                                         string equipamentoChamadoEditado = Console.ReadLine();
@@ -209,30 +206,42 @@ namespace GestaoDeEquipamenots.ConsoleApp
 
                                         idChamado++;
 
-                                        equipamentosCadastrados[editarChamado - 1] = $"{editarChamado} | {tituloChamadoEditado} | {equipamentoChamadoEditado} | " +
+                                        string chamadoEditado = equipamentosCadastrados[editarChamado - 1];
+
+                                        chamadoEditado = $"{editarChamado} | {tituloChamadoEditado} | {equipamentoChamadoEditado} | " +
                                         $"{dataAberturaChamadoEditado} | {diasEmAbertoEdiatdo}| {descricaoChamadoEditado}";
+
+                                        string[] chamadoCadastrado = new string[] { chamadoEditado };
+                                        chamadosCadastrados.AddRange(chamadoCadastrado);
 
                                         VisualizarChamadosRegistrados();
 
-                                        MostrarMensagemChamadoEditado();
-
-                                        Console.ReadLine();
+                                        ApresentarMensagemEmVerde("\n   Seu chamado foi editado com sucesso!");
                                         break;
                                     case "4":
+                                        if (chamadosCadastrados.Count == 0)
+                                        {
+                                            ApresentarMensagemEmVermelho("\n   Nenhum chamado cadastrado. Por favor, registre um chamado antes de excluír um chamado.");
+                                            break;
+                                        }
                                         VisualizarChamadosRegistrados();
 
                                         Console.Write("\n   Digite o ID referente ao chamado que deseja excluir: ");
-                                        int excluirChamado = Convert.ToInt32(Console.ReadLine());
+                                        int excluirChamadoID = Convert.ToInt32(Console.ReadLine());
+                                        int excluirChamadoIndex = chamadosCadastrados.FindIndex(e => e.StartsWith($"{excluirChamadoID} |"));
 
-                                        chamadosExcluidos.Add(excluirChamado - 1);
+                                        if (excluirChamadoIndex == -1)
+                                        {
+                                            ApresentarMensagemEmVermelho("\n   ID inválido. Por favor, digite um ID válido.");
+                                            break;
+                                        }
+                                        chamadosExcluidos.Add(excluirChamadoID - 1);
 
-                                        equipamentosCadastrados.RemoveAt(excluirChamado - 1);
+                                        equipamentosCadastrados.RemoveAt(excluirChamadoID - 1);
 
                                         VisualizarChamadosRegistrados();
 
-                                        MostrarMensagemChamadoExcluido();
-
-                                        Console.ReadLine();
+                                        ApresentarMensagemEmVerde("\n   Seu chamado foi excluído com sucesso!");
                                         break;
                                 }
                                 continuar = true;
@@ -253,23 +262,26 @@ namespace GestaoDeEquipamenots.ConsoleApp
             Console.WriteLine("\n                           Controle de Chamados                                ");
             Console.WriteLine("_________________________________________________________________________________");
 
+            if (equipamentosCadastrados.Count == 0)
+            {
+                ApresentarMensagemEmVermelho("\n   Nenhum equipamento cadastrado. Por favor, cadastre um equipamento antes\n   de realidar um chamado.");
+                return;
+            }
+
             Console.Write("\n   Digite título do chamado que deseja cadastrar: ");
             string tituloChamado = Console.ReadLine();
 
             Console.Write("\n   Digite a descricao do chamado que deseja cadastrar: ");
             string descricaoChamado = Console.ReadLine();
 
-            VisualizarEquipamentosRegistradosEscolha();
-
-            Console.Write("\n   Digite o equipamento, mostrado na tabela acima, referente a esse chamado : ");
-            string equipamentoChamado = Console.ReadLine();
-
-            if (equipamentosCadastrados.Count == 0)
+            while (true)
             {
-                Console.WriteLine("Nenhum equipamento cadastrado.");
-            }
-            else
-            {
+                VisualizarEquipamentosRegistradosEscolha();
+
+                Console.Write("\n   Digite o ID de um dos equipamentos, mostrado na tabela acima, referente a esse chamado : ");
+                string equipamentoChamado = Console.ReadLine();
+                bool equipamentoEncontrado = false;
+
                 int intEquipamentoChamado = Convert.ToInt32(equipamentoChamado);
 
                 foreach (string equipamento in equipamentosCadastrados)
@@ -281,47 +293,30 @@ namespace GestaoDeEquipamenots.ConsoleApp
                     if (idEquipamento == intEquipamentoChamado)
                     {
                         equipamentoChamado = atributosEquipamentos[1].ToString();
+                        equipamentoEncontrado = true;
                         break;
                     }
                 }
+                if (equipamentoEncontrado)
+                {
+                    string dataAberturaChamado = RegistrarDataAberturaChamado();
+                    int diasEmAberto = CalcularDiasEmAbertoChamado(dataAberturaChamado);
 
+                    idChamado++;
+
+                    string chamado = $"{idChamado} | {tituloChamado} | {equipamentoChamado} | " +
+                    $"{dataAberturaChamado} | {diasEmAberto} | {descricaoChamado} ";
+
+                    string[] chamadoCadastrado = new string[] { chamado };
+                    chamadosCadastrados.AddRange(chamadoCadastrado);
+
+                    break;
+                }
+                else
+                {
+                    ApresentarMensagemEmVermelho("\n   ID de equipamento inválido. Por favor, digite um ID válido. ");
+                }
             }
-            string dataAberturaChamado = RegistrarDataAberturaChamado();
-
-            int diasEmAberto = CalcularDiasEmAbertoChamado(dataAberturaChamado);
-
-            idChamado++;
-
-            string chamado = $"{idChamado} | {tituloChamado} | {equipamentoChamado} | " +
-            $"{dataAberturaChamado} | {diasEmAberto} | {descricaoChamado} ";
-
-            string[] chamadoCadastrado = new string[] { chamado };
-
-            chamadosCadastrados.AddRange(chamadoCadastrado);
-        }
-        static void MostrarMensagemChamadoExcluido()
-        {
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.WriteLine("   Seu chamado foi excluído com sucesso!");
-            Console.ForegroundColor = ConsoleColor.Cyan;
-        }
-        static void MostrarMensagemChamadoEditado()
-        {
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.WriteLine("   Seu chamdo foi editado com sucesso!");
-            Console.ForegroundColor = ConsoleColor.Cyan;
-        }
-        static void MostrarMensagemEquipamentoExcluido()
-        {
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.WriteLine("   Seu equipamento foi excluído com sucesso!");
-            Console.ForegroundColor = ConsoleColor.Cyan;
-        }
-        static void MostrarMensagemEquipamentoEditado()
-        {
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.WriteLine("   Seu equipamento foi editado com sucesso!");
-            Console.ForegroundColor = ConsoleColor.Cyan;
         }
         static void RegistrarEquipamento()
         {
@@ -345,7 +340,14 @@ namespace GestaoDeEquipamenots.ConsoleApp
             Console.Write("\n   Digite o fabricante desse equipamento: ");
             string fabricanteEquipamento = Console.ReadLine();
 
-            idEquipamento++;
+            int ultimoIdEquipamento = 0;
+            if (equipamentosCadastrados.Count > 0)
+            {
+                string ultimoEquipamento = equipamentosCadastrados.Last();
+                ultimoIdEquipamento = Int32.Parse(ultimoEquipamento.Split('|')[0].Trim());
+            }
+
+            idEquipamento = ultimoIdEquipamento + 1;
 
             string equipamento = $"{idEquipamento} | {nomeEquipamento} | {precoEquipamentoString} | " +
             $"{fabricanteEquipamento} | {dataFabricacaoEquipamento} | {numeroDeSerieEquipamento}";
@@ -395,12 +397,12 @@ namespace GestaoDeEquipamenots.ConsoleApp
                     }
                     else
                     {
-                        MostrarMensagemDataInvalida();
+                        ApresentarMensagemEmVermelho("\n   Data inválida. A data de fabricação deve ser entre 1900 e a data atual. Tente novamente.\"   Valor inválido. Digite apenas numeros. Tente novamente. ");
                     }
                 }
                 else
                 {
-                    MostrarMensagemDataFormatoInvalido();
+                    ApresentarMensagemEmVermelho("\n   Data inválida. O formato esperado é dd/mm/aaaa. Tente novamente.");
                 }
             }
 
@@ -497,12 +499,12 @@ namespace GestaoDeEquipamenots.ConsoleApp
                     }
                     else
                     {
-                        MostrarMensagemDataInvalida();
+                        ApresentarMensagemEmVermelho("\n   Data inválida. A data de fabricação deve ser uma data existente. Tente novamente. ");
                     }
                 }
                 else
                 {
-                    MostrarMensagemDataFormatoInvalido();
+                    ApresentarMensagemEmVermelho("\n   Data inválida. O formato esperado é dd/mm/aaaa. Tente novamente.");
                 }
             }
 
@@ -520,11 +522,11 @@ namespace GestaoDeEquipamenots.ConsoleApp
                
                 if (!double.TryParse(precoEquipamentoString, out precoEquipamento))
                 {
-                    MostrarMensagemApenasNumeros();
+                    ApresentarMensagemEmVermelho("\n   Valor inválido. Digite apenas numeros. Tente novamente. ");
                 }
                 else if (precoEquipamento <= 0)
                 {
-                    MostrarMensagemValorInvalido();
+                    ApresentarMensagemEmVermelho("\n   O valor fornecido é inválido. O valor deve ser maior que zero. Tente novamente.");
                 }
                 else
                 {
@@ -535,49 +537,16 @@ namespace GestaoDeEquipamenots.ConsoleApp
 
             return precoEquipamentoString;
         }
-        private static void MostrarMensagemApenasNumeros()
-        {
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.WriteLine("\n   Valor inválido. Digite apenas numeros. Tente novamente. ");
-            Console.ForegroundColor = ConsoleColor.Cyan;
-        }
-
         static string ValidarTamanhoNomeEquipamento(string nomeEquipamento)
         {
             while (nomeEquipamento.Length < 6)
             {
-                MostrarMensagemOperacaoInvalida();
+                ApresentarMensagemEmVermelho("\n   Operação inválida, tente novamente. ");
                 Console.Write("\n   O nome deve ter no mínimo 6 caracteres. \n   Digite o nome do equipamento que deseja cadastrar: ");
                 nomeEquipamento = Console.ReadLine();
-                Console.WriteLine();
             }
 
             return nomeEquipamento;
-        }
-        static void MostrarMensagemValorInvalido()
-        {
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.WriteLine("\n   O valor fornecido é inválido. O valor deve ser maior que zero. Tente novamente.");
-            Console.ForegroundColor = ConsoleColor.Cyan;
-        }
-        static void MostrarMensagemDataInvalida()
-        {
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.WriteLine("   Data inválida. A data de fabricação deve ser entre 1900 e a data atual. Tente novamente.");
-            Console.ForegroundColor = ConsoleColor.Cyan;
-        }
-        static void MostrarMensagemDataFormatoInvalido()
-        {
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.WriteLine("   Data inválida. O formato esperado é dd/mm/aaaa. Tente novamente.");
-            Console.ForegroundColor = ConsoleColor.Cyan;
-        }
-        static void MostrarMensagemOperacaoInvalida()
-        {
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.Write("\n   Operação inválida, tente novamente. ");
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.ReadLine();
         }
         static string MostarMenuControleEquipamentos()
         {
@@ -629,11 +598,25 @@ namespace GestaoDeEquipamenots.ConsoleApp
             {                
                 if (operacao != "1" && operacao != "2" && operacao != "S")
                 {
-                    MostrarMensagemOperacaoInvalida();
+                    ApresentarMensagemEmVermelho("\n   Operação inválida, tente novamente. ");
                     break; 
                 }
             }
             return operacao;
+        }
+        static void ApresentarMensagemEmVermelho(string mensagem)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.Write(mensagem);
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.ReadLine();
+        }
+        static void ApresentarMensagemEmVerde(string mensagem)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.Write(mensagem);
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.ReadLine();
         }
     }
 }
