@@ -9,7 +9,6 @@ namespace GestaoDeEquipamenots.ConsoleApp
     {
         static List<string> equipamentosCadastrados = new List<string>();
         static List<string> chamadosCadastrados = new List<string>();
-        static List<int> chamadosExcluidos = new List<int>();
         static bool continuar = true;
         static int idEquipamento = 0, idChamado = 0;
 
@@ -168,12 +167,7 @@ namespace GestaoDeEquipamenots.ConsoleApp
                                         Console.ReadLine();
                                         break;
                                     case "3":
-                                        if (equipamentosCadastrados.Count == 0)
-                                        {
-                                            ApresentarMensagemEmVermelho("\n   Nenhum equipamento cadastrado. Por favor, cadastre um equipamento antes de editar um chamado.");
-                                            break;
-                                        }
-                                        else if (chamadosCadastrados.Count == 0)
+                                        if (chamadosCadastrados.Count == 0)
                                         {
                                             ApresentarMensagemEmVermelho("\n   Nenhum chamado cadastrado. Por favor, registre um chamado antes de editar um chamado.");
                                             break;
@@ -181,12 +175,14 @@ namespace GestaoDeEquipamenots.ConsoleApp
                                         VisualizarChamadosRegistrados();
 
                                         Console.Write("\n   Digite o ID do chamado que deseja editar: ");
-                                        int editarChamado = Convert.ToInt32(Console.ReadLine());
+                                        int editarChamadoID = Convert.ToInt32(Console.ReadLine());
 
-                                        if (chamadosExcluidos.Contains(editarChamado - 1))
+                                        int editarChamadoIndex = chamadosCadastrados.FindIndex(e => e.StartsWith($"{editarChamadoID} |"));
+
+                                        if (editarChamadoID < 1 || editarChamadoID > chamadosCadastrados.Count)
                                         {
-                                            ApresentarMensagemEmVermelho("\n   Este chamado foi excluído e não pode ser editado.");
-                                            break;
+                                            ApresentarMensagemEmVermelho("\n   ID inválido. Por favor, digite um ID válido.");
+                                            return;
                                         }
 
                                         Console.Write("\n   Digite o título do chamado: ");
@@ -204,15 +200,8 @@ namespace GestaoDeEquipamenots.ConsoleApp
 
                                         int diasEmAbertoEdiatdo = CalcularDiasEmAbertoChamado(dataAberturaChamadoEditado);
 
-                                        idChamado++;
-
-                                        string chamadoEditado = equipamentosCadastrados[editarChamado - 1];
-
-                                        chamadoEditado = $"{editarChamado} | {tituloChamadoEditado} | {equipamentoChamadoEditado} | " +
+                                        chamadosCadastrados[editarChamadoIndex] = $"{editarChamadoID} | {tituloChamadoEditado} | {equipamentoChamadoEditado} | " +
                                         $"{dataAberturaChamadoEditado} | {diasEmAbertoEdiatdo}| {descricaoChamadoEditado}";
-
-                                        string[] chamadoCadastrado = new string[] { chamadoEditado };
-                                        chamadosCadastrados.AddRange(chamadoCadastrado);
 
                                         VisualizarChamadosRegistrados();
 
@@ -228,20 +217,29 @@ namespace GestaoDeEquipamenots.ConsoleApp
 
                                         Console.Write("\n   Digite o ID referente ao chamado que deseja excluir: ");
                                         int excluirChamadoID = Convert.ToInt32(Console.ReadLine());
-                                        int excluirChamadoIndex = chamadosCadastrados.FindIndex(e => e.StartsWith($"{excluirChamadoID} |"));
+                                        
+                                        int excluirChamadoIndex = chamadosCadastrados.FindIndex(c => c.StartsWith($"{excluirChamadoID} |"));
 
                                         if (excluirChamadoIndex == -1)
                                         {
                                             ApresentarMensagemEmVermelho("\n   ID inválido. Por favor, digite um ID válido.");
                                             break;
                                         }
-                                        chamadosExcluidos.Add(excluirChamadoID - 1);
 
-                                        equipamentosCadastrados.RemoveAt(excluirChamadoID - 1);
+                                        chamadosCadastrados.RemoveAt(excluirChamadoIndex);
+                                        
+
+                                        for (int i = excluirChamadoIndex; i < chamadosCadastrados.Count; i++)
+                                        {
+                                            string chamado = chamadosCadastrados[i];
+                                            string[] dadosChamado = chamado.Split('|');
+                                            int novoID = i + 1;
+                                            chamadosCadastrados[i] = $"{novoID} | {dadosChamado[1].Trim()} | {dadosChamado[2].Trim()} | {dadosChamado[3].Trim()} | {dadosChamado[4].Trim()} | {dadosChamado[5].Trim()}";
+                                        }
 
                                         VisualizarChamadosRegistrados();
 
-                                        ApresentarMensagemEmVerde("\n   Seu chamado foi excluído com sucesso!");
+                                        ApresentarMensagemEmVerde("\n   Seu chamado foi excluído com sucesso, e sua lista está atualizada!");
                                         break;
                                 }
                                 continuar = true;
